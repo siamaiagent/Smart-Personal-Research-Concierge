@@ -1,28 +1,22 @@
-from agents.query_understanding import QueryUnderstandingAgent
-from agents.research_agent import ResearchAgent
-from agents.fact_checker import FactCheckerAgent
-from agents.synthesizer import SynthesizerAgent
-from agents.action_plan import ActionPlanAgent
+from src.llm_client import LLMClient
+from src.agents.query_understanding import QueryUnderstandingAgent
 
 def main():
-    query = "What's the impact of AI automation on small agencies?"
+    llm = LLMClient()
+    agent = QueryUnderstandingAgent(llm)
 
-    # create agent instances
-    q_agent = QueryUnderstandingAgent()
-    r_agent = ResearchAgent()
-    f_agent = FactCheckerAgent()
-    s_agent = SynthesizerAgent()
-    a_agent = ActionPlanAgent()
+    queries = [
+        "How can I automate LinkedIn lead capture using n8n?",
+        "Write a short tweet thread about AI agents.",
+        "Market size of automation tools in 2025."
+    ]
 
-    # pipeline
-    subtopics = q_agent.run(query)
-    research_results = r_agent.run(subtopics)
-    checked = f_agent.run(research_results)
-    summary = s_agent.run(checked)
-    actions = a_agent.run(summary)
-
-    print("SUMMARY:\n", summary)
-    print("ACTIONS:\n", actions)
+    for q in queries:
+        print("\n=== Query ===")
+        print(q)
+        out = agent.run(q)
+        print("Subtopics:", out)
+        print("Session memory:", agent.session_memory)
 
 if __name__ == "__main__":
     main()
