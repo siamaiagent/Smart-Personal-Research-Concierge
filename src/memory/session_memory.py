@@ -1,3 +1,10 @@
+"""
+In-memory session storage for temporary conversation data.
+
+Stores session-specific data that is lost when program exits.
+Each session has a unique ID and can store key-value pairs.
+"""
+
 import uuid
 from datetime import datetime
 

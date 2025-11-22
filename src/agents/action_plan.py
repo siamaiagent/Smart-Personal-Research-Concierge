@@ -7,7 +7,36 @@ load_dotenv()
 
 class ActionPlanAgent:
     """
-    Agent that converts research summary into actionable steps.
+    Converts research summary into actionable steps.
+    
+    This agent takes the synthesized summary and generates concrete,
+    actionable recommendations. It creates both a detailed checklist
+    and a quick-start guide for immediate action.
+    
+    Dependencies:
+        - google.generativeai (Gemini API for action generation)
+    
+    Inputs:
+        summary (str): Synthesized research summary
+        original_query (str): Optional original user query for context
+    
+    Outputs:
+        dict: {
+            'checklist': List[str] - 5 specific, measurable action items
+            'quick_start': List[str] - 3-step immediate action guide
+        }
+    
+    Action Item Characteristics:
+        - Specific and concrete
+        - Measurable when possible
+        - Directly related to research findings
+        - Prioritized by importance
+    
+    Example:
+        >>> agent = ActionPlanAgent()
+        >>> plan = agent.run(summary, "How to start with AI?")
+        >>> for item in plan['checklist']:
+        ...     print(f"☐ {item}")
     """
     
     def __init__(self):
@@ -38,7 +67,8 @@ class ActionPlanAgent:
         """Generate actionable steps using LLM"""
         
         query_context = f"Original question: {original_query}\n\n" if original_query else ""
-        
+        # Prompt LLM to convert summary into actionable steps
+        # Requests structured JSON output with checklist and quick-start guide
         prompt = f"""{query_context}Based on this research summary, create an actionable plan:
 
 {summary}

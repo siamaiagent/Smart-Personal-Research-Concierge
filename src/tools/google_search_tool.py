@@ -8,7 +8,32 @@ load_dotenv()
 class GoogleSearchTool:
     """
     Simulates Google Search using Gemini to generate realistic search results.
-    For production, replace with actual Google Search API.
+    
+    NOTE: This is a simulation for development/demo purposes. For production,
+    replace with actual Google Custom Search API or similar service.
+    
+    Dependencies:
+        - google.generativeai (Gemini API)
+    
+    Inputs:
+        query (str): Search query
+        num_results (int): Number of results to return (default: 3)
+    
+    Outputs:
+        List[dict]: Search results, each containing:
+            - title: Article/page title
+            - snippet: 2-sentence summary
+            - url: URL (currently simulated with example.com)
+    
+    Limitations:
+        - Returns simulated results, not real web search
+        - URLs are placeholders (example.com)
+        - For real searches, integrate Google Custom Search API
+    
+    Example:
+        >>> tool = GoogleSearchTool()
+        >>> results = tool.search("AI automation", num_results=3)
+        >>> print(results[0]['title'])
     """
     
     def __init__(self):
@@ -30,8 +55,10 @@ class GoogleSearchTool:
         """
         print(f"[GoogleSearchTool] Searching for: {query}")
         
+        # Prompt LLM to generate realistic search results
+        # In production, replace this with actual Google Custom Search API call
         prompt = f"""Generate {num_results} realistic search results for the query: "{query}"
-
+        
 Return ONLY a JSON array with this exact format:
 [
   {{

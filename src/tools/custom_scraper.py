@@ -5,7 +5,41 @@ import time
 class CustomScraper:
     """
     Simple web scraper to extract article text from URLs.
-    Respects timeouts and basic error handling.
+    
+    Fetches web pages and extracts paragraph text using BeautifulSoup.
+    Respects timeouts and includes basic error handling.
+    
+    Dependencies:
+        - requests: HTTP client
+        - beautifulsoup4: HTML parsing
+    
+    Ethical Considerations:
+        - Respects robots.txt (implement check before production use)
+        - Includes user-agent header
+        - Implements rate limiting (1 second between requests)
+        - Only scrapes publicly accessible content
+    
+    Inputs:
+        url (str): Web page URL to scrape
+    
+    Outputs:
+        str: Extracted text (first 10 paragraphs) or None if failed
+    
+    Configuration:
+        timeout: 6 seconds default
+        headers: Includes User-Agent to identify bot
+    
+    Limitations:
+        - Only extracts <p> tags
+        - May fail on JavaScript-heavy sites
+        - No authentication support
+        - No robots.txt checking (add before production)
+    
+    Example:
+        >>> scraper = CustomScraper()
+        >>> text = scraper.fetch_text("https://example.com/article")
+        >>> if text:
+        ...     print(text[:100])
     """
     
     def __init__(self):

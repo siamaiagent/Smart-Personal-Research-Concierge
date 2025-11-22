@@ -3,7 +3,36 @@ import os
 
 class FactCheckerAgent:
     """
-    Agent that verifies research findings and removes duplicates.
+    Verifies research findings and removes duplicates.
+    
+    This agent reviews findings from ResearchAgent and assesses their
+    credibility using LLM-based verification. It removes duplicate information
+    and assigns confidence scores to each finding.
+    
+    Dependencies:
+        - google.generativeai (Gemini API for credibility assessment)
+    
+    Inputs:
+        research_results (List[dict]): Results from ResearchAgent containing
+            findings with title, snippet, and URL
+    
+    Outputs:
+        List[dict]: Verified results, each containing:
+            - subtopic: Research area
+            - findings: List of findings with added fields:
+                * verified: Boolean indicating credibility (>0.6 confidence)
+                * confidence: Float (0.0-1.0) credibility score
+    
+    Verification Criteria:
+        - Relevance to subtopic
+        - Specificity of information
+        - Source URL reliability
+        - Duplicate detection
+    
+    Example:
+        >>> agent = FactCheckerAgent()
+        >>> verified = agent.run(research_results)
+        >>> high_confidence = [f for f in verified[0]['findings'] if f['confidence'] > 0.8]
     """
     
     def __init__(self):
@@ -82,6 +111,8 @@ class FactCheckerAgent:
     
     def _assess_credibility(self, subtopic, finding):
         """Use LLM to assess finding credibility"""
+        # Use LLM to assess credibility based on relevance, specificity, and source
+        # Returns confidence score 0.0-1.0
         prompt = f"""Assess the credibility of this research finding:
 
 Subtopic: {subtopic}

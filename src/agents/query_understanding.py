@@ -4,10 +4,35 @@ import google.generativeai as genai
 import os
 
 class QueryUnderstandingAgent:
+    
     """
-    Agent that analyzes user queries and breaks them into research subtopics.
-    Also detects user preferences like "short", "detailed", "tweet thread", etc.
+    Analyzes user queries and breaks them into focused research subtopics.
+    
+    This agent is the first step in the research pipeline. It takes a natural
+    language query and converts it into 3-5 specific subtopics that can be
+    researched independently. It also detects user preferences like desired
+    summary length and output format.
+    
+    Dependencies:
+        - google.generativeai (Gemini API)
+        - Prompt template: prompts/query_understanding.txt
+    
+    Inputs:
+        query (str): User's research question in natural language
+    
+    Outputs:
+        dict: {
+            'subtopics': List[str] - 3-5 focused research areas
+            'preferences': dict - Detected user preferences (length, format)
+        }
+    
+    Example:
+        >>> agent = QueryUnderstandingAgent()
+        >>> result = agent.run("What is AI automation?")
+        >>> print(result['subtopics'])
+        ['AI automation overview', 'Key technologies', 'Business applications']
     """
+
     
     def __init__(self):
         # Configure Gemini API
@@ -15,7 +40,9 @@ class QueryUnderstandingAgent:
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-pro')
         
-        # Load prompt template
+        
+        # Load prompt template that instructs LLM to split query into subtopics
+        # Template uses {query} placeholder for user's question
         import os.path as path
         prompt_path = path.join(path.dirname(__file__), '..', '..', 'prompts', 'query_understanding.txt')
         with open(prompt_path, 'r') as f:

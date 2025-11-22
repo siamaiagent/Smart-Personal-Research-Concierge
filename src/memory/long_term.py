@@ -1,3 +1,10 @@
+"""
+Persistent long-term memory using JSON file storage.
+
+Stores user preferences, query history, and other data that persists
+between program runs. Data is saved to memory/mem.json.
+"""
+
 import json
 import os
 from datetime import datetime

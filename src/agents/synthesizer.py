@@ -10,7 +10,34 @@ load_dotenv(project_root / '.env')
 
 class SynthesizerAgent:
     """
-    Agent that combines verified findings into a concise summary.
+    Combines verified findings into a coherent summary.
+    
+    This agent takes verified research results and synthesizes them into
+    a flowing, readable summary. It respects user preferences for length
+    and format, and applies context compaction if the summary exceeds limits.
+    
+    Dependencies:
+        - google.generativeai (Gemini API for text synthesis)
+    
+    Inputs:
+        verified_results (List[dict]): Fact-checked findings with confidence scores
+        preferences (dict): Optional user preferences:
+            - length: 'short' | 'medium' | 'detailed'
+            - format: 'paragraph' | 'bullet_list' | 'tweet_thread'
+    
+    Outputs:
+        str: Synthesized summary in natural language, respecting user preferences
+    
+    Features:
+        - Context compaction: Automatically shortens long summaries
+        - Confidence weighting: Prioritizes high-confidence findings
+        - Length control: Adapts to user's desired detail level
+        - Fallback: Returns basic summary if LLM fails
+    
+    Example:
+        >>> agent = SynthesizerAgent()
+        >>> summary = agent.run(verified_results, {'length': 'short'})
+        >>> print(summary)
     """
     
     def __init__(self):

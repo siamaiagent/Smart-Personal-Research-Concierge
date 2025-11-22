@@ -1,3 +1,11 @@
+"""
+Observability module for tracking agent performance and behavior.
+
+Provides centralized logging, metrics collection, and timing tracking
+for all agents in the research pipeline. Saves metrics to JSON for
+analysis and debugging.
+"""
+
 import logging
 import json
 import time
