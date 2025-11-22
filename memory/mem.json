@@ -1,0 +1,39 @@
+{
+  "user_preferences": {
+    "summary_length": "medium",
+    "language": "en",
+    "default_length": "medium",
+    "default_format": "paragraph"
+  },
+  "frequent_queries": [],
+  "query_history": [
+    {
+      "query": "What is AI?",
+      "timestamp": "2025-11-22T08:28:45.030616"
+    },
+    {
+      "query": "How does machine learning work?",
+      "timestamp": "2025-11-22T08:28:45.035076"
+    },
+    {
+      "query": "What's the impact of AI automation on small businesses?",
+      "timestamp": "2025-11-22T08:29:18.945380"
+    },
+    {
+      "query": "What's the impact of AI automation on small businesses?",
+      "timestamp": "2025-11-22T08:30:23.718128"
+    },
+    {
+      "query": "What's the impact of AI automation on small businesses?",
+      "timestamp": "2025-11-22T08:30:31.453497"
+    },
+    {
+      "query": "What is AI?",
+      "timestamp": "2025-11-22T08:34:31.780856"
+    },
+    {
+      "query": "How does machine learning work?",
+      "timestamp": "2025-11-22T08:34:31.783692"
+    }
+  ]
+}
