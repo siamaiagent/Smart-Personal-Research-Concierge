@@ -7,7 +7,7 @@ from agents.synthesizer import SynthesizerAgent
 from agents.action_plan import ActionPlanAgent
 from memory.session_memory import SessionMemory
 from memory.long_term import LongTermMemory
-import json
+
 
 def main():
     """Complete pipeline demonstration with memory and observability"""
@@ -169,5 +169,40 @@ def main():
     
     logging.info("Pipeline completed successfully")
 
+
+def demo_long_running_operations():
+    """
+    Demonstrate long-running operations with pause/resume.
+    This shows how the system can handle operations that take minutes.
+    """
+    from long_running import LongRunningJobManager
+    
+    print("\n" + "="*80)
+    print("🔄 LONG-RUNNING OPERATIONS DEMO")
+    print("="*80)
+    
+    job_manager = LongRunningJobManager()
+    
+    # Start a job
+    query = "Deep research: AI impact on healthcare in 2024-2025"
+    job_id = job_manager.start_deep_research(query, config={'depth': 'comprehensive'})
+    
+    print(f"\n✅ Started long-running job: {job_id}")
+    print(f"📋 Query: {query}")
+    
+    # Check status
+    status = job_manager.check_status(job_id)
+    print(f"⏸️  Job status: {status['status']} ({status['progress']}% complete)")
+    
+    print("\n💡 To resume this job later, run:")
+    print(f"   python -c \"from src.long_running import LongRunningJobManager; mgr = LongRunningJobManager(); mgr.resume_job('{job_id}')\"")
+    
+    print("\n💡 To check status:")
+    print(f"   python -c \"from src.long_running import LongRunningJobManager; print(LongRunningJobManager().check_status('{job_id}'))\"")
 if __name__ == "__main__":
-    main()
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == '--long-running-demo':
+        demo_long_running_operations()
+    else:
+        main()

@@ -135,7 +135,7 @@ class ObservabilityLogger:
                         metrics_history = json.load(f)
                         if not isinstance(metrics_history, list):
                             metrics_history = [metrics_history]
-                    except:
+                    except Exception:
                         metrics_history = []
             
             metrics_history.append(metrics_summary)

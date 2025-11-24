@@ -41,10 +41,10 @@ class SynthesizerAgent:
     """
     
     def __init__(self):
-        import os
+        
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
     
     def run(self, verified_results, preferences=None):
         """
@@ -83,7 +83,8 @@ class SynthesizerAgent:
     def _generate_summary(self, findings, preferences):
         """Generate summary using LLM"""
         
-        # Build context from findings
+        # Build context from all verified findings
+        # LLM will synthesize this into a coherent summary respecting length preferences
         context = "\n\n".join([
             f"Subtopic: {f['subtopic']}\nInformation: {f['content']} (confidence: {f['confidence']:.2f})"
             for f in findings
@@ -138,7 +139,7 @@ Write compressed version:"""
         try:
             response = self.model.generate_content(prompt)
             return response.text.strip()
-        except:
+        except Exception:
             # Simple truncation fallback
             return summary[:1000] + "..."
     

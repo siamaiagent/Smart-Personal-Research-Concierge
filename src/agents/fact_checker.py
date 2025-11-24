@@ -36,10 +36,10 @@ class FactCheckerAgent:
     """
     
     def __init__(self):
-        import os
+        
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
     
     def run(self, research_results):
         """
@@ -131,5 +131,5 @@ Return ONLY a number between 0.0 and 1.0, nothing else."""
             response = self.model.generate_content(prompt)
             confidence = float(response.text.strip())
             return max(0.0, min(1.0, confidence))  # Clamp between 0 and 1
-        except:
+        except Exception:
             return 0.7  # Default confidence
