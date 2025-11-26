@@ -1,5 +1,10 @@
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
 import google.generativeai as genai
 import os
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
 import json
 from dotenv import load_dotenv
 
@@ -40,8 +45,8 @@ class GoogleSearchTool:
         
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
-
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
+    @retry_on_rate_limit(max_retries=3, backoff_factor=2)
     def search(self, query: str, num_results: int = 3):
         """
         Simulate search results for a query.
@@ -54,7 +59,13 @@ class GoogleSearchTool:
             List of dicts with 'title', 'snippet', 'url'
         """
         print(f"[GoogleSearchTool] Searching for: {query}")
+         # Add rate limiting
+        rate_limiter = get_rate_limiter()
+        rate_limiter.wait_if_needed()
         
+        # ... rest stays the same
+
+
         # Prompt LLM to generate realistic search results
         # In production, replace this with actual Google Custom Search API call
         prompt = f"""Generate {num_results} realistic search results for the query: "{query}"

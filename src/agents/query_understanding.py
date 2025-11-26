@@ -3,6 +3,11 @@ import re
 import google.generativeai as genai
 import os
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
+
 class QueryUnderstandingAgent:
     
     """
@@ -38,7 +43,7 @@ class QueryUnderstandingAgent:
         # Configure Gemini API
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
         
         
         # Load prompt template that instructs LLM to split query into subtopics
@@ -98,17 +103,23 @@ class QueryUnderstandingAgent:
             preferences['format'] = 'paragraph'
         
         return preferences
-    
+    @retry_on_rate_limit(max_retries=3, backoff_factor=2)
     def _generate_subtopics(self, query: str):
         """Use Gemini to generate research subtopics"""
+
+        # Add rate limiting before API call
+        rate_limiter = get_rate_limiter()
+        rate_limiter.wait_if_needed()
+
         # Format prompt with query
         prompt = self.prompt_template.format(query=query)
-        
+    
         try:
             # Call Gemini
             response = self.model.generate_content(prompt)
             response_text = response.text.strip()
-            
+        
+        # ... rest of the method stays the same
             # Parse JSON response
             # Remove markdown code blocks if present
             response_text = re.sub(r'```json\s*|\s*```', '', response_text)

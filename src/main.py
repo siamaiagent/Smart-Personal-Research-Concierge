@@ -7,7 +7,11 @@ from agents.synthesizer import SynthesizerAgent
 from agents.action_plan import ActionPlanAgent
 from memory.session_memory import SessionMemory
 from memory.long_term import LongTermMemory
+from utils.rate_limiter import get_rate_limiter
 
+# Configure rate limiter for free tier (10 requests/minute is safe)
+rate_limiter = get_rate_limiter(requests_per_minute=10)
+logging.info("Rate limiter configured: 10 requests/minute")
 
 def main():
     """Complete pipeline demonstration with memory and observability"""

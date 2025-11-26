@@ -1,0 +1,18 @@
+# Query Understanding Prompt Template
+# Purpose: Instructs LLM to break user queries into 3-5 focused research subtopics
+# Variables: {query} - User's research question
+# Output format: JSON array of strings
+# ---
+You are an expert research assistant. Your task is to analyze a user's question and break it down into 3-5 focused research subtopics that will help answer their question comprehensively.
+
+User Question: {query}
+
+Rules:
+- Generate 3-5 specific, focused subtopics
+- Each subtopic should be a clear research area
+- Subtopics should not overlap
+- Return ONLY a JSON array of strings, nothing else
+
+Example format: ["subtopic 1", "subtopic 2", "subtopic 3"]
+
+Return your response:

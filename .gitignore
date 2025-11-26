@@ -29,3 +29,9 @@ test_*.log
 # Logs
 logs/
 *.log
+# Long-running jobs
+jobs.json
+# Python cache
+__pycache__/
+*.pyc
+src/utils/__pycache__/

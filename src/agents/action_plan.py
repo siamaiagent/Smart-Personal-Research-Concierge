@@ -4,7 +4,10 @@ from dotenv import load_dotenv
 import json
 
 load_dotenv()
-
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
 class ActionPlanAgent:
     """
     Converts research summary into actionable steps.
@@ -43,7 +46,7 @@ class ActionPlanAgent:
         
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
     
     def run(self, summary: str, original_query: str = None):
         """
@@ -62,10 +65,11 @@ class ActionPlanAgent:
         
         print(f"[ActionPlanAgent] Created {len(action_plan['checklist'])} action items")
         return action_plan
-    
+    @retry_on_rate_limit(max_retries=3, backoff_factor=2)
     def _generate_action_plan(self, summary: str, original_query: str):
         """Generate actionable steps using LLM"""
-        
+        rate_limiter = get_rate_limiter()
+        rate_limiter.wait_if_needed()
         query_context = f"Original question: {original_query}\n\n" if original_query else ""
         # Prompt LLM to convert summary into actionable steps
         # Requests structured JSON output with checklist and quick-start guide

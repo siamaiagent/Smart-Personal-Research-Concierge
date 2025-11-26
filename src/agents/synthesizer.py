@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
 
 # Load .env from project root
 project_root = Path(__file__).parent.parent.parent
@@ -44,7 +46,7 @@ class SynthesizerAgent:
         
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
     
     def run(self, verified_results, preferences=None):
         """
@@ -79,10 +81,16 @@ class SynthesizerAgent:
         
         print(f"[SynthesizerAgent] Generated {len(summary)} character summary")
         return summary
-    
+    @retry_on_rate_limit(max_retries=3, backoff_factor=2)
     def _generate_summary(self, findings, preferences):
         """Generate summary using LLM"""
         
+        rate_limiter = get_rate_limiter()
+        rate_limiter.wait_if_needed()
+        
+        # ... rest stays the same
+
+
         # Build context from all verified findings
         # LLM will synthesize this into a coherent summary respecting length preferences
         context = "\n\n".join([

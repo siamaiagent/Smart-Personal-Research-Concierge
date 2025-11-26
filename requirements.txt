@@ -1,0 +1,12 @@
+# Google Generative AI
+google-generativeai>=0.3.0
+
+# Web Scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Environment Management
+python-dotenv>=1.0.0
+
+# Code Quality (optional)
+flake8>=6.0.0

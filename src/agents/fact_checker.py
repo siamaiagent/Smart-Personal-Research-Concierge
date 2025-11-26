@@ -1,6 +1,12 @@
 import google.generativeai as genai
 import os
 
+# Add these lines RIGHT HERE:
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.rate_limiter import get_rate_limiter, retry_on_rate_limit
+
 class FactCheckerAgent:
     """
     Verifies research findings and removes duplicates.
@@ -39,7 +45,7 @@ class FactCheckerAgent:
         
         api_key = os.environ.get('GOOGLE_API_KEY') or os.getenv('GOOGLE_API_KEY')
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
     
     def run(self, research_results):
         """
@@ -108,11 +114,17 @@ class FactCheckerAgent:
             'subtopic': subtopic,
             'findings': verified_findings
         }
-    
+   
+    @retry_on_rate_limit(max_retries=2, backoff_factor=2)
+
     def _assess_credibility(self, subtopic, finding):
         """Use LLM to assess finding credibility"""
         # Use LLM to assess credibility based on relevance, specificity, and source
         # Returns confidence score 0.0-1.0
+        rate_limiter = get_rate_limiter()
+        rate_limiter.wait_if_needed()
+    
+    # ... rest stays the same
         prompt = f"""Assess the credibility of this research finding:
 
 Subtopic: {subtopic}
