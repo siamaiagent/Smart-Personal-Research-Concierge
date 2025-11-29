@@ -7,7 +7,7 @@ Project Overview - Smart Personal Research Concierge
 
 This project contains the core logic for Smart Personal Research Concierge, a multi-agent system designed to automate comprehensive research workflows. The agent is built using Google Gemini and follows a modular, production-ready architecture.
 
-./assets/architecture.png
+![Architecture](./thumbnail.png "Optional Title")
 
 ### Problem Statement
 
@@ -18,56 +18,58 @@ Conducting research manually is laborious because it requires significant time i
 Agents can automatically orchestrate the entire research workflow by intelligently breaking down complex queries into focused subtopics, conducting parallel research across multiple information streams, systematically verifying information credibility through confidence scoring, and synthesizing findings into actionable recommendations. They can gather information from diverse sources using specialized tools, validate facts through independent verification layers, apply context compaction to manage information density, and generate structured action plans with measurable goals—transforming research from a manual, time-intensive process into a streamlined, verifiable, and scalable system that delivers results in minutes instead of hours.
 
 ### Architecture
+![architecture](https://github.com/user-attachments/assets/dc097f03-efa7-4962-80cb-7a7f465cc8a8)
+
 
 Core to Smart Personal Research Concierge is the research\_pipeline -- a prime example of a multi-agent system. It's not a monolithic application but an ecosystem of specialized agents, each contributing to a different stage of the research process. This modular approach allows for a sophisticated and robust workflow with built-in quality controls.
 
 The real power of the system lies in its team of specialized agents, each an expert in its domain.
 
-**Query Strategist: QueryUnderstandingAgent**
+**Query Strategist: `QueryUnderstandingAgent`**
 
 This agent is responsible for analyzing user intent and breaking queries into well-structured research subtopics. It intelligently decomposes complex questions into 3-5 focused areas and detects user preferences for output format and length. The agent uses prompt engineering to guide the LLM in creating comprehensive research plans that cover all relevant aspects of the query.
 
-**Information Gatherer: ResearchAgent**
+**Information Gatherer: `ResearchAgent`**
 
-Once the research plan is approved, the ResearchAgent takes over. This agent is an expert in parallel information gathering, capable of researching multiple subtopics simultaneously using ThreadPoolExecutor. It uses the Google Search tool to gather findings and can optionally employ web scraping for deeper content analysis. The parallel execution provides a 5x speedup over sequential research, completing 5 subtopics in approximately 32 seconds.
+Once the research plan is approved, the `ResearchAgent` takes over. This agent is an expert in parallel information gathering, capable of researching multiple subtopics simultaneously using ThreadPoolExecutor. It uses the Google Search tool to gather findings and can optionally employ web scraping for deeper content analysis. The parallel execution provides a 5x speedup over sequential research, completing 5 subtopics in approximately 32 seconds.
 
-**Validator: FactCheckerAgent**
+**Validator: `FactCheckerAgent`**
 
-The FactCheckerAgent is a critical quality control component that verifies research findings. This agent removes duplicate information, assesses credibility using LLM-based confidence scoring (0.0-1.0 scale), and filters findings below a 0.6 confidence threshold. The validation process ensures that only verified, high-quality information proceeds to synthesis, achieving a 93% verification rate in production use.
+The `FactCheckerAgent` is a critical quality control component that verifies research findings. This agent removes duplicate information, assesses credibility using LLM-based confidence scoring (0.0-1.0 scale), and filters findings below a 0.6 confidence threshold. The validation process ensures that only verified, high-quality information proceeds to synthesis, achieving a 93% verification rate in production use.
 
-**Synthesizer: SynthesizerAgent**
+**Synthesizer: `SynthesizerAgent`**
 
-To create coherent output, the SynthesizerAgent combines verified findings into professional summaries. This agent respects user preferences for length and format, applies context compaction for long content, and prioritizes high-confidence findings. It transforms disparate research results into flowing, readable prose that maintains accuracy while ensuring accessibility.
+To create coherent output, the `SynthesizerAgent` combines verified findings into professional summaries. This agent respects user preferences for length and format, applies context compaction for long content, and prioritizes high-confidence findings. It transforms disparate research results into flowing, readable prose that maintains accuracy while ensuring accessibility.
 
-**Action Planner: ActionPlanAgent**
+**Action Planner: `ActionPlanAgent`**
 
-The ActionPlanAgent converts research insights into practical next steps. This agent generates structured 5-item checklists with measurable goals and creates 3-step quick-start guides with specific timelines. It focuses on immediate, actionable recommendations that users can implement within 24-48 hours.
+The `ActionPlanAgent` converts research insights into practical next steps. This agent generates structured 5-item checklists with measurable goals and creates 3-step quick-start guides with specific timelines. It focuses on immediate, actionable recommendations that users can implement within 24-48 hours.
 
 ### Essential Tools and Utilities
 
 The research agents are equipped with specialized tools to perform their tasks effectively.
 
-**Search Tool (GoogleSearchTool)**
+**Search Tool (`GoogleSearchTool`)**
 
-A crucial tool that enables the ResearchAgent to gather information. It generates realistic search results using the Gemini API, simulating comprehensive web research. The tool returns structured results with titles, snippets, and URLs for each finding.
+A crucial tool that enables the `ResearchAgent` to gather information. It generates realistic search results using the Gemini API, simulating comprehensive web research. The tool returns structured results with titles, snippets, and URLs for each finding.
 
-**Web Scraper (CustomScraper)**
+**Web Scraper (`CustomScraper`)**
 
-This tool enables deeper content analysis by extracting article text from URLs. It uses BeautifulSoup to parse HTML, handles encoding errors gracefully, and implements respectful rate limiting with timeouts. The scraper can enrich search results with full article content for more thorough fact-checking.
+This tool enables deeper content analysis by extracting article text from URLs. It uses `BeautifulSoup` to parse HTML, handles encoding errors gracefully, and implements respectful rate limiting with timeouts. The scraper can enrich search results with full article content for more thorough fact-checking.
 
-**Rate Limiter (RateLimiter)**
+**Rate Limiter (`RateLimiter`)**
 
 A critical utility that manages API quota constraints. The rate limiter implements smart throttling (6-second intervals for free tier), automatic retry logic with exponential backoff, and intelligent wait-time parsing from error messages. This ensures zero rate limit failures even with 23 consecutive API calls.
 
-**Memory Systems (SessionMemory, LongTermMemory)**
+**Memory Systems (`SessionMemory`, `LongTermMemory`)**
 
 These tools provide state management across research sessions. SessionMemory maintains conversation context in-memory, while LongTermMemory persists user preferences and query history to JSON files. The dual-layer approach balances performance with persistence.
 
-**Observability Logger (ObservabilityLogger)**
+**Observability Logger (`ObservabilityLogger`)**
 
 This utility tracks every agent operation, collecting timing metrics, success rates, and error logs. It exports machine-readable JSON metrics and provides real-time progress updates, enabling comprehensive system monitoring and debugging.
 
-**Job Manager (LongRunningJobManager)**
+**Job Manager (`LongRunningJobManager`)**
 
 For research tasks requiring several minutes, the job manager provides pause/resume capability. It maintains job state in JSON files, tracks progress (0-100%), and allows operations to survive interruptions or restarts.
 
@@ -103,10 +105,10 @@ It is suggested you create a virtual environment using your preferred tooling.
 
 Install dependencies:
 
-bash
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   pip install -r requirements.txt   `
-
+```bash
+pip install -r requirements.txt
+```
 ### Setting Up API Key
 
 1.  Get a free Google Gemini API key from [AI Studio](https://aistudio.google.com/app/apikey)
@@ -120,16 +122,14 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
 
 From the command line of the working directory execute the following command:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   ./run.bat  # Windows   `
-
+```bash
+./run.bat  # Windows  
+```
 Or manually:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   cd src  python main.py   `
-
+```bash
+cd src  python main.py 
+```
 **Expected Output:**
 
 The system will automatically execute the five-stage pipeline:
@@ -162,8 +162,51 @@ Edit src/config.py to adjust:
 
 Project Structure
 -----------------
+The project is organized as follows:
+*   `src/`: Main application code for the Concierge Agent system.
+    *   `main.py`: Entry point that orchestrates the entire research pipeline.
+    *   `agents/`: Specialized multi-agent components.
+        *   `query_understanding.py`: Breaks down user queries into structured subtopics.
+        *   `research_agent.py`: Runs parallel research using search tools & scraping.
+        *   `fact_checker.py`: Validates information and assigns confidence scores.
+        *   `synthesizer.py`: Merges research into clear, concise summaries.
+        *   `action_plan.py`: Produces actionable steps, frameworks, and checklists.
+    *   `memory/`: Short-term and long-term memory subsystems.
+        *   `session_memory.py`: Stores in-session conversation and context.
+        *   `long_term.py`: Saves persistent user preferences and history (JSON).
+    *   `tools/`: External integration layer.
+        *   `google_search_tool.py`: Wrapper for Google search API/tool.
+        *   `custom_scraper.py`: Extracts content from webpages reliably.
+    *   `utils/`: Core helper utilities.
+        *   `rate_limiter.py`: Manages API quotas, cooldowns, and retry logic.
+    *   `config.py`: Central configuration settings and environment flags.
+    *   `observability.py`: Logging, metrics, tracing, and debug instrumentation.
+    *   `long_running.py`: Manages queued tasks and long-running operations.
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   concierge-agent/  │  ├── src/                          # Main application code  │   ├── agents/                   # Specialized agents  │   │   ├── query_understanding.py    # Query decomposition  │   │   ├── research_agent.py         # Parallel research  │   │   ├── fact_checker.py           # Verification & scoring  │   │   ├── synthesizer.py            # Summary generation  │   │   └── action_plan.py            # Action plan creation  │   │  │   ├── memory/                   # Memory systems  │   │   ├── session_memory.py         # Temporary session storage  │   │   └── long_term.py              # Persistent JSON storage  │   │  │   ├── tools/                    # External integrations  │   │   ├── google_search_tool.py     # Search tool wrapper  │   │   └── custom_scraper.py         # Web content extraction  │   │  │   ├── utils/                    # Utilities  │   │   └── rate_limiter.py           # API rate management  │   │  │   ├── config.py                 # System configuration  │   ├── main.py                   # Application entry point  │   ├── observability.py          # Logging & metrics  │   └── long_running.py           # Job management system  │  ├── prompts/                      # LLM prompt templates  │   └── query_understanding.txt       # Query decomposition prompt  │  ├── assets/                       # Visual assets  │   └── architecture.png              # System architecture diagram  │  ├── logs/                         # Runtime logs (gitignored)  │   ├── agent.log                     # Detailed operation logs  │   └── metrics.json                  # Performance metrics  │  ├── memory/                       # Persistent storage (gitignored)  │   └── mem.json                      # User preferences & history  │  ├── .env                          # Environment variables (gitignored)  ├── .env.example                  # Environment template  ├── .gitignore                    # Git ignore rules  ├── requirements.txt              # Python dependencies  ├── run.bat                       # Quick start script (Windows)  ├── LICENSE                       # MIT License  ├── CONTRIBUTING.md               # Contribution guidelines  ├── LONG_RUNNING_OPERATIONS.md    # Long-running ops documentation  ├── README.md                     # This file  └── thumbnail.png                 # Project thumbnail   `
+*   `prompts/`: LLM prompt templates.
+    *   `query_understanding.txt`: Template for decomposition of user queries.
+
+*   `assets/`: Visual assets for documentation.
+    *   `architecture.png`: Diagram of system architecture.
+
+*   `logs/`: Runtime logs (gitignored).
+    *   `agent.log`: Detailed agent activity logs.
+    *   `metrics.json`: Performance and latency metrics.
+
+*   `memory/`: Persistent memory layer (gitignored).
+    *   `mem.json`: User history and preferences storage.
+
+*   `.env`: Environment configuration variables (not committed).
+*   `.env.example`: Template for environment setup.
+*   `.gitignore`: Ignored files and paths.
+*   `requirements.txt`: Python dependencies list.
+*   `run.bat`: Windows quick-start script.
+*   `LICENSE`: MIT License.
+*   `CONTRIBUTING.md`: Contributor guidelines.
+*   `LONG_RUNNING_OPERATIONS.md`: Documentation for long-running job handling.
+*   `README.md`: Main project documentation.
+*   `thumbnail.png`: Project thumbnail image.
+
 
 Workflow
 --------
@@ -172,13 +215,13 @@ The Smart Personal Research Concierge follows this workflow:
 
 1.  **Query Understanding:** The system analyzes the user's research question, breaking it into 3-5 focused subtopics. It also detects user preferences for output format and length.
     
-2.  **Parallel Research:** The ResearchAgent launches parallel threads to research each subtopic simultaneously using the Google Search tool. Each subtopic generates 3 findings (15 total for 5 subtopics).
+2.  **Parallel Research:** The `ResearchAgent` launches parallel threads to research each subtopic simultaneously using the Google Search tool. Each subtopic generates 3 findings (15 total for 5 subtopics).
     
-3.  **Fact Checking:** The FactCheckerAgent removes duplicate findings and verifies each one using LLM-based credibility assessment. Each finding receives a confidence score (0.0-1.0), and findings below 0.6 threshold are filtered out.
+3.  **Fact Checking:** The `FactCheckerAgent` removes duplicate findings and verifies each one using LLM-based credibility assessment. Each finding receives a confidence score (0.0-1.0), and findings below 0.6 threshold are filtered out.
     
-4.  **Synthesis:** Once verification is complete, the SynthesizerAgent combines the verified findings into a professional, coherent summary. It respects user preferences and applies context compaction if needed.
+4.  **Synthesis:** Once verification is complete, the `SynthesizerAgent` combines the verified findings into a professional, coherent summary. It respects user preferences and applies context compaction if needed.
     
-5.  **Action Planning:** After synthesis, the ActionPlanAgent converts insights into practical steps. It generates a 5-item checklist with measurable goals and a 3-step quick-start guide with specific timelines.
+5.  **Action Planning:** After synthesis, the `ActionPlanAgent` converts insights into practical steps. It generates a 5-item checklist with measurable goals and a 3-step quick-start guide with specific timelines.
     
 6.  **Output & Observability:** The system presents the final summary and action plan to the user, along with comprehensive metrics showing agent performance, timing, and verification statistics.
     
@@ -209,7 +252,7 @@ Key Features Implemented
     
 *   ✅ **Documentation** (+5 points): Comprehensive README and deployment guides
     
-*   ⏳ **Video Submission** (+10 points): explanation of the project
+*   ✅ **Video Submission** (+10 points): Explanation of the project
     
 
 Performance Metrics
