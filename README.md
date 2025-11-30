@@ -18,8 +18,8 @@ Conducting research manually is laborious because it requires significant time i
 Agents can automatically orchestrate the entire research workflow by intelligently breaking down complex queries into focused subtopics, conducting parallel research across multiple information streams, systematically verifying information credibility through confidence scoring, and synthesizing findings into actionable recommendations. They can gather information from diverse sources using specialized tools, validate facts through independent verification layers, apply context compaction to manage information density, and generate structured action plans with measurable goals—transforming research from a manual, time-intensive process into a streamlined, verifiable, and scalable system that delivers results in minutes instead of hours.
 
 ### Architecture
+![architecture](https://github.com/user-attachments/assets/74e7df16-1cd9-44d8-b43a-d9c205a98279)
 
-<img width="560" height="280" alt="Untitled design (6)" src="https://github.com/user-attachments/assets/b4598b49-abb5-4326-8ee9-4a5edf468add" />
 
 Core to Smart Personal Research Concierge is the research\_pipeline -- a prime example of a multi-agent system. It's not a monolithic application but an ecosystem of specialized agents, each contributing to a different stage of the research process. This modular approach allows for a sophisticated and robust workflow with built-in quality controls.
 
