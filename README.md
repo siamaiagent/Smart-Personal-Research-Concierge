@@ -330,6 +330,4 @@ Acknowledgments
 *   **ADK Community** for documentation and support
     
 
-**Submission Date:** December 1, 2025**Track:** Concierge Agents**Competition:** [Agents Intensive - Capstone Project](https://www.kaggle.com/competitions/agents-intensive-capstone-project/)#   S m a r t - P e r s o n a l - R e s e a r c h - C o n c i e r g e 
- 
- 
+**Submission Date:** December 1, 2025**Track:** Concierge Agents**Competition:** [Agents Intensive - Capstone Project](https://www.kaggle.com/competitions/agents-intensive-capstone-project/)#
